@@ -1,0 +1,38 @@
+%YAML 1.2
+---
+name: CCA
+file_extensions: [cca, ccasm, ccassembly]
+scope: source.c
+
+contexts:
+  main:
+    - match: ;.+$
+      scope: comment
+
+    - match: \b(def)\b
+      scope: keyword.declaration
+
+    - match: :\w+
+      scope: entity.name.label
+
+    - match: \d
+      scope: constant.numeric
+
+    - match: (?<=(,| |\n))(a|b|c|d)(?=(,| |\n))
+      scope: variable.function
+
+    - match: \b(psh|pop|dup|mov|add|sub|mul|div|not|and|or|xor|inc|dec|syscall|frs|cmp|)\b
+      scope: storage
+
+    - match: \b(jmp|je|jne|jg|js|jo|call|ret|stp)\b
+      scope: entity.name.label
+
+    - match: '"'
+      push: string
+
+  string:
+    - meta_scope: string.quoted.double.c
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: '"'
+      pop: true
